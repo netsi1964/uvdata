@@ -29,7 +29,7 @@ export default class MillenniumFalcon extends React.PureComponent {
 			</div>
 			<br /><br />
 			<table className="table"><tbody>
-					{list.map((item) => <tr key={item.url}><td><ItemDisplay>{item}</ItemDisplay></td></tr>)}
+					{list.map((item) => <tr key={item.url}><td><ItemDisplay kind={item.kind}>{item}</ItemDisplay></td></tr>)}
 				</tbody>
 			</table>
 		</div>);
