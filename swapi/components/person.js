@@ -1,15 +1,33 @@
+const RenderHeight = props => {
+	const { height } = props;
+	const style = {'fontSize': `${(height-50)/100}em`}
+	return (
+		<span style={style}>
+			{height}
+		</span>
+	);
+};
 const Person = props => {
 	let { name, height, hair_color, gender, skin_color, eye_color } = props;
 	console.log(props);
-	let hair = (hair_color==='none' || hair_color==='n/a') ? 'balled head' : hair_color+' haired';
+	let hair =
+		hair_color === "none" || hair_color === "n/a"
+			? "balled head"
+			: hair_color + " haired";
 	return (
 		<div>
 			<h2>
-				{name}{" "}
-				{gender!=='n/a'
-					? `is a  ${height} cm tall ${hair} ${gender}`
-					: `is a ${height} cm tall ${skin_color} non-human`}
-					{' with '}<span style={{"font-size":"2em", "color":eye_color, 'text-shadow':'0 0 5px hsl(0,0%,30%)'}}>{eye_color}</span> eyes.
+				{name} <RenderHeight {...props} />
+				<span
+					style={{
+						"fontSize": "2em",
+						"color": eye_color,
+						"textShadow": "0 0 5px hsl(0,0%,30%)"
+					}}
+				>
+					{eye_color}
+				</span>{" "}
+				eyes.
 			</h2>
 		</div>
 	);

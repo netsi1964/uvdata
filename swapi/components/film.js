@@ -1,10 +1,16 @@
+import { sortOptions } from "../utils";
+
 const Film = props => {
-	console.log(props)
+	const cols = Object.keys(sortOptions["films"]).map(key => {
+		return (
+			<div>
+				{props[key]}
+			</div>
+		);
+	});
 	return (
 		<div>
-			<h2>
-				TEST
-			</h2>
+			{cols}
 		</div>
 	);
 };
