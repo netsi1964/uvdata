@@ -10,12 +10,7 @@ const defaultData = {
 	operations: 0
 };
 
-const defaultState = {
-	sortBy: null
-};
-
 const reducer = (state = defaultState, action) => {
-	console.log("State", state);
 	switch (action.type) {
 		case types.SET_DATA: {
 			const { endpoint, data } = action.payload;
@@ -47,6 +42,35 @@ const reducer = (state = defaultState, action) => {
 				...state,
 				operations: state.operations - 1
 			};
+		}
+
+		case types.SORT_CHANGED: {
+			const endpoint = state.endpoint;
+			return {
+				...state,
+				[endpoint + "_sort"]: {
+					sortKey: action.payload.sortKey,
+					desc: action.payload.desc
+				}
+			};
+		}
+
+		case types.OPEN_TOGGLED: {
+			const { kind, name } = action.payload;
+			if (name !== "") {
+				let { data } = state;
+				let updated = data[kind].map((ele, i) => {
+					if (ele["name"] === name) {
+						let isExpanded = ele.isExpanded || false;
+						ele.isExpanded = !ele.isExpanded;
+					}
+					return ele;
+				});
+				return {
+					...state,
+					data: { [kind]: updated }
+				};
+			}
 		}
 	}
 

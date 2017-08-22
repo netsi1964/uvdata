@@ -1,4 +1,4 @@
-const person = {
+const people = {
 	name: "Luke Skywalker",
 	height: "172",
 	mass: "77",

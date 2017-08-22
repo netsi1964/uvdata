@@ -1,27 +1,45 @@
 import React from "react";
 import Film from "./film";
 import Person from "./person";
+import { toTitle } from "../utils";
 
 export default class ItemDisplay extends React.PureComponent {
 	static propTypes = {
 		children: React.PropTypes.shape({
 			url: React.PropTypes.string.isRequired,
 			name: React.PropTypes.string.isRequired,
-			kind: React.PropTypes.string.isRequired
+			kind: React.PropTypes.string.isRequired,
+			isExpanded: React.PropTypes.bool
 		})
 	};
 
 	state = {
-		isExpanded: false
+		isExpanded: this.props.isExpanded || false
 	};
 
-	handleExpandToggle = () => {
-		this.setState(state => ({ isExpanded: !state.isExpanded }));
+	handleExpandToggle = evt => {
+		if (evt.target) {
+			this.props.onToggleOpen(this.props.kind, this.props.children.name);
+			// this.setState(state => ({ isExpanded: !state.isExpanded }));
+		}
 	};
 
 	render() {
-		const { children: { name }, onExpandToggle, kind } = this.props;
-		const { isExpanded } = this.state;
+		const {
+			children: { name },
+			kind,
+			sortKey,
+			onToggleOpen,
+			isExpanded
+		} = this.props;
+
+		const attrs = {
+			isExpanded,
+			sortKey,
+			kind,
+			data: this.props.children,
+			onToggleOpen
+		};
 
 		return (
 			<td>
@@ -40,14 +58,7 @@ export default class ItemDisplay extends React.PureComponent {
 								</button>
 							</td>
 							<td>
-								{name}
-							</td>
-							<td>
-								{isExpanded
-									? kind === "films"
-										? <Film {...this.props.children} />
-										: <Person {...this.props.children} />
-									: null}
+								{kind === "films" ? <Film {...attrs} /> : <Person {...attrs} />}
 							</td>
 						</tr>
 					</tbody>

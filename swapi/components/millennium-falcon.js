@@ -8,17 +8,26 @@ import { sortOptions, doSort } from "../utils";
 export default class MillenniumFalcon extends React.PureComponent {
 	static propTypes = {
 		onChooseEndpoint: React.PropTypes.func.isRequired,
+		onToggleOpen: React.PropTypes.func.isRequired,
 		list: React.PropTypes.arrayOf(
 			React.PropTypes.shape({
 				url: React.PropTypes.string.isRequired
 			})
 		).isRequired,
-		side: React.PropTypes.string
+		side: React.PropTypes.string,
+		sortKey: React.PropTypes.string
 	};
 
 	content() {
-		const { loading, list, onChooseEndpoint, endpoint } = this.props;
-		console.log("loading", loading);
+		const {
+			loading,
+			list,
+			onChooseEndpoint,
+			endpoint,
+			onSortChanged,
+			onToggleOpen
+		} = this.props;
+
 		if (loading) {
 			return (
 				<div className="loading">
@@ -33,25 +42,40 @@ export default class MillenniumFalcon extends React.PureComponent {
 
 		const kind = endpoint;
 		const keys = sortOptions[kind];
-		const sortKey = Object.keys(keys)[3];
+		const sortKey = this.props.sortKey || Object.keys(keys)[0];
 		const sortFunction = keys[sortKey];
-		const desc = false;
+		const desc = this.props.desc || false;
 		const sorted = doSort(list, sortKey, desc, sortFunction);
 
-		const attributes = { keys, sortKey, desc };
+		const attributes = {
+			keys,
+			sortKey,
+			desc,
+			onToggleOpen,
+			onClick: onSortChanged,
+			style: { margin: "10px 0" }
+		};
 
 		return (
 			<div>
 				<SortSelector {...attributes} />
-				<table className="table table-striped">
+				<table className="table table-striped table-hover">
 					<tbody>
-						{sorted.map(item =>
-							<tr key={item.url}>
-								<ItemDisplay kind={item.kind}>
-									{item}
-								</ItemDisplay>
-							</tr>
-						)}
+						{sorted.map((item, i) => {
+							return (
+								<tr key={item.url}>
+									<ItemDisplay
+										isExpanded={item.isExpanded}
+										key={i}
+										kind={item.kind}
+										sortKey={sortKey}
+										onToggleOpen={onToggleOpen}
+									>
+										{item}
+									</ItemDisplay>
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</div>
