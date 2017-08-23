@@ -35,10 +35,9 @@ const sortOptions = {
 		mass: comparerFloat,
 		hair_color: comparerDefault,
 		skin_color: comparerDefault,
-		eye_color: comparerDefault,
+		eye_color: comparerDefault
 	}
 };
-
 
 const formatStringDate = (stringDate = "") => {
 	const temp = stringDate.split("-");
@@ -47,7 +46,6 @@ const formatStringDate = (stringDate = "") => {
 	const timeOfYear = month < 4 ? "early" : month > 8 ? "late" : "mid";
 	return `${timeOfYear} ${date.getFullYear()} `;
 };
-
 
 const doSort = (list, sortKey, desc, comparer) => {
 	const trueValue = desc ? -1 : 1;
@@ -60,8 +58,8 @@ const doSort = (list, sortKey, desc, comparer) => {
 
 const itemInfo = (label, items) => {
 	const count = items.length;
-	return `${(count===0) ? 'no' : count} ${label}${(count<2) ? '' : 's'}`;
-}
+	return `${count === 0 ? "no" : count} ${label}${count < 2 ? "" : "s"}`;
+};
 
 const toTitle = (string = "") =>
 	string
@@ -78,5 +76,23 @@ const RawHTML = ({ children, className = "" }) =>
 		className={className}
 		dangerouslySetInnerHTML={{ __html: children.replace(/\n/g, "<br />") }}
 	/>;
+const calculateBmi = (weight, height) => {
+	var result = "";
+	if (weight > 0 && height > 0) {
+		var finalBmi = weight / (height / 100 * height / 100);
+				if (finalBmi < 18.5) {
+			result = "thin";
+		}
+		if (finalBmi > 18.5 && finalBmi < 25) {
+			result = "fit";
+		}
+		if (finalBmi > 25) {
+			result = "overweighted";
+		}
+	} else {
+		result = "";
+	}
+	return result;
+};
 
-export { sortOptions, doSort, toTitle, formatStringDate, itemInfo,  RawHTML };
+export { sortOptions, doSort, toTitle, formatStringDate, itemInfo, RawHTML, calculateBmi };

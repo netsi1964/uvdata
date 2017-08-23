@@ -3,7 +3,8 @@ import {
 	toTitle,
 	formatStringDate,
 	itemInfo,
-	RawHTML
+	RawHTML,
+	calculateBmi
 } from "../utils";
 import moment from "moment";
 
@@ -37,40 +38,37 @@ class Person extends React.PureComponent {
 		window.a = this.props;
 		const { isExpanded, sortKey, kind, data } = this.props;
 		const {
-			director,
-			producer,
-			opening_crawl,
-			planets,
-			characters,
-			species,
-			vehicles,
-			starships
+			name,
+			birth_year,
+			hair_color,
+			eye_color,
+			skin_color,
+			gender,
+			height,
+			mass
 		} = data;
 		const keys = Object.keys(sortOptions["films"]);
 		let content = null;
-		const rd = moment(data["release_date"]);
-
-		const dateString = rd.fromNow();
 		let sortedInfo = data[sortKey];
-		switch (sortKey) {
-			case "release_date":
-				sortedInfo = rd.fromNow();
-				break;
-			case "species":
-				sortedInfo = sortedInfo.length;
-				break;
-			case "planets":
-				sortedInfo = sortedInfo.length;
-				break;
-		}
+
+
+
+		const genderTitle = ` ${gender !== "none"
+			? gender === "female" ? "She" : "He"
+			: "It"}`;
+		const appear = calculateBmi(mass, height);
+		const isMachine = "nonen/a".indexOf(gender)>-1;
+		const machine = isMachine ? '"' : "";
+		const  appearence = (appear!=='' && !isMachine) ? ` — appearing ${appear} —` : '';
+		const genderSign = (!isMachine) ? ((gender==='male') ? '♂' : '♁') : '';
 
 		const header = (
 			<h3>
-				{data["name"]}
+				{name} <small>{genderSign}</small>
 			</h3>
 		);
 		const title =
-			sortKey !== "title"
+			sortKey !== "name"
 				? <small>
 						{toTitle(sortKey)}: {sortedInfo}
 					</small>
@@ -82,31 +80,38 @@ class Person extends React.PureComponent {
 					{title}
 				</div>
 			: <div>
-					<div className="col-xs-5">
-						<h3>
-							{header}
-						</h3>
-						<pre>
-							Released on {moment(rd).format("dddd MMM Do YYYY")}
-						</pre>
+					<div className="col-xs-12">
+						{header}
+
 						<div>
-							Back in {rd.year()}
-							<em> {director}</em> was director on this movie produced by{" "}
-							<em>{producer}</em>.
-						</div>
-						<div>
-							This movie spreads across {itemInfo("planet", planets)}, has{" "}
-							{itemInfo("character", characters)}, {itemInfo("specie", species)},{" "}
-							{itemInfo("vehicle", vehicles)} and{" "}
-							{itemInfo("starship", starships)}.
-						</div>
-					</div>
-					<div className="col-xs-7">
-						<div className="jumbotron">
-							<h4>Opering crawl</h4>
-							<RawHTML>
-								{opening_crawl}
-							</RawHTML>
+							{name}
+							{birth_year !== "unknown"
+								? ` is born in the year ${birth_year}`
+								: ` came to life on an unknown date`}.
+							<br />
+							{`${genderTitle} is a ${!isMachine && hair_color!=='none'
+								? hair_color +
+									(hair_color.indexOf("blonde") > -1 ? "" : " haired")
+								: " hairless"}`}
+								{`${skin_color !== "unknown"
+									? ", "+ skin_color.replace(/, /ig, "/") + ' ' +
+										machine +
+										"skin colored" + machine
+									: ""}`}
+							{`${eye_color !== "unknown"
+								? ", " +
+									machine +
+									eye_color.replace(/, /ig, "/") +
+									" eyed" +
+									machine
+								: ""}`}
+							{` ${isMachine ? "machine" : gender}.`}
+							<br />
+							{` ${genderTitle}${appearence} has the height of ${height !== "unknown"
+								? height
+								: ""} cm`}
+							{(mass!=='unknown') ? ` weighing ${mass} kg` : ''}.
+
 						</div>
 					</div>
 				</div>;

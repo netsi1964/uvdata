@@ -83,9 +83,7 @@ class Film extends React.PureComponent {
 				</div>
 			: <div>
 					<div className="col-xs-5">
-						<h3>
 							{header}
-							</h3>
 							<pre>Released on {moment(rd).format("dddd MMM Do YYYY")}</pre>
 						<div>
 							Back in {rd.year()}

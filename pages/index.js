@@ -27,7 +27,7 @@ export default class ReduxPage extends React.PureComponent {
 							href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
 							type="text/css"
 						/>
-						<style jsx>{`
+						<style>{`
 							/* Wanted to test how to add CSS - next framework suggest this way */
 							body:after {
 								position: fixed;
